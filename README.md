@@ -73,6 +73,22 @@ This is especially useful when having Service layers that are consumed by other 
 For this library we are leaning on useful library that is in charge of machinery gearing when it comes to finding handlers for corresponding commands:
 [Tactician](https://tactician.thephpleague.com/) takes care of that for us.
 
+We have created a Specific implementor that connects to our Port: BusFacadeInterface via constructor as ImplementorInterface.
+Then in a DIC the wiring up is completed.
+
+Example in Laravel(via Contextual Binding).
+
+Imagine we want to inject our Bus implementation to a specific controller in Laravel application, then we just need to inject ImplementorInterface within its constructor and define
+the recipe in DIC as something like following snippet:
+
+```php
+$this->app->when(ConsumerController::class)
+          ->needs(ImplementorInterface::class)
+          ->give(function ($app) {
+              return ($app->make(Tactician::class));
+});
+```
+
 A pretty good example of Command-Bus in practice could be having a service that can be consumed by multiple contexts.
 
 Imagine that we have a price API that provides prices according specific business rules.
