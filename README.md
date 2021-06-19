@@ -1,8 +1,10 @@
 # Hexagonal Approach Oriented Library
 
+[![GPLv3 License](https://img.shields.io/badge/license-GPLv3-marble.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ticaje/hexagonal.svg?style=flat-square)](https://packagist.org/packages/ticaje/hexagonal)
 [![Quality Score](https://img.shields.io/scrutinizer/g/ticaje/Hexagonal-Design-Library.svg?style=flat-square)](https://scrutinizer-ci.com/g/ticaje/Hexagonal-Design-Library)
 [![Total Downloads](https://img.shields.io/packagist/dt/ticaje/hexagonal.svg?style=flat-square)](https://packagist.org/packages/ticaje/hexagonal)
+[![Blog](https://img.shields.io/badge/Blog-hectorbarrientos.com-magenta)](https://hectorbarrientos.com)
 
 ## Installation
 
