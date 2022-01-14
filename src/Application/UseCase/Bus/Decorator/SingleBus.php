@@ -5,14 +5,14 @@ declare(strict_types=1);
  * @author Ticaje <ticaje@filetea.me>
  */
 
-namespace Ticaje\Hexagonal\Application\UseCase\Bus;
+namespace Ticaje\Hexagonal\Application\UseCase\Bus\Decorator;
 
 use Ticaje\Hexagonal\Application\Signatures\Responder\ResponseInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\BusFacadeInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\ImplementorInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\UseCaseCommandInterface;
 
-class BusOrchrestator implements BusFacadeInterface
+class SingleBus implements BusFacadeInterface
 {
     /** @var ImplementorInterface */
     private $implementor;
