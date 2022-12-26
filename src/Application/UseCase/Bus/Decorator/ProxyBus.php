@@ -35,7 +35,7 @@ class ProxyBus implements BusFacadeInterface
     /**
      * @inheritDoc
      */
-    public function execute(UseCaseCommandInterface $command): ResponseInterface
+    public function execute(UseCaseCommandInterface $command): ?ResponseInterface
     {
         if (!isset($this->providers[get_class($command)])) {
             throw new \InvalidArgumentException('There are no commands assigned to this Handler');
