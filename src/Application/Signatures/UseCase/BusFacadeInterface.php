@@ -20,5 +20,5 @@ interface BusFacadeInterface
      * @param UseCaseCommandInterface $command
      * @return ResponseInterface
      */
-    public function execute(UseCaseCommandInterface $command): ResponseInterface;
+    public function execute(UseCaseCommandInterface $command): ?ResponseInterface;
 }
