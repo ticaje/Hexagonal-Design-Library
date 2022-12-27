@@ -19,7 +19,7 @@ trait DtoTestTrait
     /** @var ReflectionClass $reflection */
     protected $reflection;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->reflection = new ReflectionClass($this->instance);

@@ -14,6 +14,7 @@ use Ticaje\Hexagonal\Application\Signatures\UseCase\ImplementorInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\UseCaseCommandInterface;
 use Ticaje\Hexagonal\Application\UseCase\Bus\Bus;
 use Ticaje\Hexagonal\Test\Unit\BaseTest;
+use TypeError;
 
 /**
  * Class BusTest
@@ -43,7 +44,7 @@ class BusTest extends BaseTest
     /** @var int */
     protected $propertiesNumber = 6;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->implementor = $this->createMock($this->implementorInterface);
         $this->instance = $this->getMockBuilder($this->class)
@@ -62,7 +63,8 @@ class BusTest extends BaseTest
     {
         $invalidArgument = [];
         $pattern = '/must implement interface .*UseCaseCommandInterface/';
-        $this->expectExceptionMessageRegExp($pattern, 'Expect proper error when wrong parameter passed along');
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('Argument 1 passed');
         $this->instance->execute($invalidArgument);
     }
 

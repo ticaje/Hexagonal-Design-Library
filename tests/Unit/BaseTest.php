@@ -22,7 +22,7 @@ abstract class BaseTest extends ParentClass
 
     protected $interface;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->instance = new $this->class();
     }
