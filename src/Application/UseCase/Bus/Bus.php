@@ -11,6 +11,7 @@ use Ticaje\Hexagonal\Application\Signatures\Responder\ResponseInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\BusFacadeInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\ImplementorInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\UseCaseCommandInterface;
+use League\Tactician\CommandBus;
 
 /**
  * Class Bus
@@ -20,13 +21,16 @@ use Ticaje\Hexagonal\Application\Signatures\UseCase\UseCaseCommandInterface;
 class Bus implements BusFacadeInterface
 {
     /** @var ImplementorInterface */
-    private $implementor;
+    private ImplementorInterface $implementor;
 
     /** @var array $commands */
-    private $commands;
+    private array $commands;
 
     /** @var array $handlers */
-    private $handlers;
+    private array $handlers;
+
+    /** @var ?CommandBus $bus */
+    private ?CommandBus $bus;
 
     /**
      * Bus constructor.
@@ -43,6 +47,7 @@ class Bus implements BusFacadeInterface
         $this->commands = $commands;
         $this->handlers = $handlers;
         $this->implementor = $implementor;
+        $this->bus = $this->implementor->provide($this->orchestrate());
     }
 
     /**
@@ -50,15 +55,14 @@ class Bus implements BusFacadeInterface
      */
     public function execute(UseCaseCommandInterface $command): ResponseInterface
     {
-        $bus = $this->implementor->provide($this->orchestrate());
-        return $bus->handle($command);
+        return $this->bus->handle($command);
     }
 
     /**
      * @return array
      * Orchestrating service contract, no virtual types allowed
      */
-    private function orchestrate()
+    private function orchestrate(): array
     {
         $result = [];
         foreach ($this->commands as $index => $command) {
