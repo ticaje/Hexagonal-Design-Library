@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Ticaje\Hexagonal\Application\UseCase\Bus;
 
+use League\Tactician\CommandBus;
 use Ticaje\Hexagonal\Application\Signatures\Responder\ResponseInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\BusFacadeInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\ImplementorInterface;
 use Ticaje\Hexagonal\Application\Signatures\UseCase\UseCaseCommandInterface;
-use League\Tactician\CommandBus;
 
 /**
  * Class Bus
@@ -66,9 +66,68 @@ class Bus implements BusFacadeInterface
     {
         $result = [];
         foreach ($this->commands as $index => $command) {
-            $result[get_class($command)] = $this->handlers[$index];
+            if (!array_key_exists($index, $this->handlers)) {
+                throw new \InvalidArgumentException(
+                    sprintf('No handler configured for command key "%s".', (string) $index)
+                );
+            }
+
+            $commandClass = $this->resolveCommandClass($command);
+            $result[$commandClass] = $this->handlers[$index];
         }
 
         return $result;
+    }
+
+    /**
+     * Resolves command class name from object instance or class-string.
+     *
+     * @param mixed $command
+     * @return string
+     */
+    private function resolveCommandClass(mixed $command): string
+    {
+        if (is_object($command)) {
+            if (!$command instanceof UseCaseCommandInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Configured command object "%s" must implement %s.',
+                        $command::class,
+                        UseCaseCommandInterface::class
+                    )
+                );
+            }
+
+            return $command::class;
+        }
+
+        if (is_string($command)) {
+            $commandClass = ltrim($command, '\\');
+
+            if (!class_exists($commandClass)) {
+                throw new \InvalidArgumentException(
+                    sprintf('Configured command class "%s" does not exist.', $commandClass)
+                );
+            }
+
+            if (!is_subclass_of($commandClass, UseCaseCommandInterface::class)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Configured command class "%s" must implement %s.',
+                        $commandClass,
+                        UseCaseCommandInterface::class
+                    )
+                );
+            }
+
+            return $commandClass;
+        }
+
+        throw new \InvalidArgumentException(
+            sprintf(
+                'Command mapping entries must be object|string, "%s" given.',
+                get_debug_type($command)
+            )
+        );
     }
 }
